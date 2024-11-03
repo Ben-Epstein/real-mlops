@@ -1,0 +1,44 @@
+name: Check Lockfile
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        working-directory: ['./src']
+        python-version: ['3.12']
+    defaults:
+      run:
+        working-directory: ${{ matrix.working-directory }}
+    steps:
+      - uses: actions/checkout@v4
+      
+      - uses: ./.github/actions/setup-repo
+        with:
+          working-directory: ${{ matrix.working-directory }}
+          python-version: ${{ matrix.python-version }}
+
+      - name: Test lockfiles
+        id: check_lock
+        run: uv lock && git diff --exit-code uv.lock
+
+      # - name: Message on failure
+      #   if: failure()
+      #   uses: actions/github-script@v7
+      #   with:
+      #     # If you want this part to run, which will leave a comment on the PR directly, create a token (or github bot) and set the github secret.
+      #     github-token: ${{ secrets.COMMENT_TOKEN }}
+      #     script: |
+      #       const prNumber = context.payload.pull_request.number;
+      #       const prAuthor = context.payload.pull_request.user.login;
+      #       const body = `:warning: @${prAuthor}, it looks like you've modified the dependencies in pyproject.toml. run <code>make lock</code> to fix it and push the changes.`;
+      #       github.rest.issues.createComment({
+      #         owner: context.repo.owner,
+      #         repo: context.repo.repo,
+      #         issue_number: prNumber,
+      #         body: body
+      #       });
