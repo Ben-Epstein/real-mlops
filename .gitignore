@@ -1,7 +1,14 @@
+# testing data
+ext_table1
+ext_table2
+*.parquet
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
+
+.vscode
 
 # C extensions
 *.so

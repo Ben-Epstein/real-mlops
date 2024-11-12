@@ -15,7 +15,8 @@ setup:
 		echo "Can't find lockfile. Locking"; \
 		uv lock; \
 	fi
-	uv sync
+	uv sync --all-extras
+	uv pip install --no-deps -e .
 
 .PHONY: format
 format: setup

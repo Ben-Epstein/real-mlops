@@ -9,19 +9,33 @@ dependencies = [
     "prefect>=3.1.0, <4",
     "sqlmesh[github,slack,llm]>=0.130.1, <0.131",
     "pydantic >=2.9.2, <3",
-    "polars >=1.12, <2",
+    "polars[pyarrow] >=1.12, <2",
     "pyarrow >=18, <19",
     "deltalake >=0.21.0, <0.22",
 ]
 
-[project.optional-dependencies]
+[tool.setuptools]
+package-dir = {"" = "src"}      
+
+[tool.setuptools.packages.find]
+where = ["src"]                 
+include = ["features", "models"]
+
+[dependency-groups]
 dev = [
     "coverage >=7.4.0, <8",
     "mypy >=1.10, <2",
     "pytest >=8.2, <9",
     "pytest-cov >=5.0.0, <6",
     "ruff >=0.4.5, <1.0",
-    "ipython"
+    "ipython",
+    "watchfiles",
+    # sqlmesh[web] has really tight dependencies that are in conflict with prod packages. 
+    # Because this is for dev we loosen them
+    "fastapi >=0.110.2, <1.0",
+    "watchfiles>=0.19.0",
+    "uvicorn[standard] >=0.22.0, <0.23",
+    "sse-starlette>=0.2.2",
 ]
 
 [project.urls]

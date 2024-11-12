@@ -5,5 +5,5 @@ AUDIT (
   SELECT *
   FROM @this_model
   WHERE
-    item_id < 0
+    part < 0
   
