@@ -6,13 +6,12 @@ import duckdb
 import polars as pl
 from prefect import flow, task
 
-from features.config import DB_FILE as FEATURE_STORE_DB
-
 SQLMESH_ROOT = Path(__file__).parent / "features"
 STREAMING_BATCH_SIZE = 50_000
 
 
-def _tmp_product_raw_parquet():
+def _tmp_product_raw_parquet() -> dict[str, str]:
+    parquet_locs = {}
     query_date = date.today() - timedelta(days=1)
     for table in ["parquet_1.parquet", "parquet_2.parquet"]:
         df1 = duckdb.query(
@@ -23,10 +22,13 @@ def _tmp_product_raw_parquet():
         ).pl()
         df = pl.concat([df1, df2])
         df.write_parquet(table)
+        parquet_locs[table] = Path(table).name
+    return parquet_locs
 
 
 @task(log_prints=True)
-def ingest_to_silver(parquet_maps: dict[str, str]):
+def ingest_to_silver(parquet_maps: dict[str, str]) -> None:
+    """Ingest raw data dump from client to silver delta lake."""
     # TODO: Read from root parquet, appent to ext_table1 and ext_table2
     for parquet_path, ext_table in parquet_maps.items():
         lazy_df = pl.scan_parquet(parquet_path)
@@ -37,7 +39,11 @@ def ingest_to_silver(parquet_maps: dict[str, str]):
 
 
 @task(log_prints=True)
-def run_sqlmesh(start_ds: date | None = None, end_ds: date | None = None):
+def run_sqlmesh(start_ds: date | None = None, end_ds: date | None = None) -> None:
+    """Run sqlmesh cron.
+
+    TODO: Check for pythonic sdk to do this.
+    """
     cmd = f"sqlmesh -p {SQLMESH_ROOT} run"
     if start_ds:
         cmd += f" -s {start_ds}"
@@ -49,20 +55,13 @@ def run_sqlmesh(start_ds: date | None = None, end_ds: date | None = None):
     print(result)
 
 
-@task(log_prints=True)
-def append_to_gold():
-    con = duckdb.connect(FEATURE_STORE_DB)
-    # TODO: Push to root/gold
-    print(con)
-
-
 @flow(name="Feature Store", log_prints=True)
-def build_features(start_ds: date | None = None, end_ds: date | None = None):
-    ingest_to_silver()
+def build_features(parquet_paths: dict[str, str], start_ds: date | None = None, end_ds: date | None = None) -> None:
+    """Main flow. Run sqlmesh, migrate to gold."""
+    ingest_to_silver(parquet_paths)
     run_sqlmesh(start_ds, end_ds)
-    append_to_gold()
 
 
 if __name__ == "__main__":
-    _tmp_product_raw_parquet()
-    build_features()
+    parquet_paths = _tmp_product_raw_parquet()
+    build_features(parquet_paths)

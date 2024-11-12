@@ -1,25 +1,30 @@
 [project]
+version = "0.0.1"
 name = "real-mlops"
-dynamic = ["version"]
+# dynamic = ["version"]
 description = "MLOps doesn't have to be that hard"
 readme = "README.md"
 requires-python = ">=3.9"
 dependencies = [
     "duckdb>=1.1.2, <2",
     "prefect>=3.1.0, <4",
-    "sqlmesh[github,slack,llm]>=0.130.1, <0.131",
+    "sqlmesh[github,slack,llm]>=0.132.0, <0.133",
     "pydantic >=2.9.2, <3",
     "polars[pyarrow] >=1.12, <2",
     "pyarrow >=18, <19",
     "deltalake >=0.21.0, <0.22",
 ]
 
+# [tool.setuptools.dynamic]
+# version = {attr = "src.__version__"}
+
+
 [tool.setuptools]
 package-dir = {"" = "src"}      
 
 [tool.setuptools.packages.find]
 where = ["src"]                 
-include = ["features", "models"]
+include = ["features", "flows"]
 
 [dependency-groups]
 dev = [
@@ -41,9 +46,6 @@ dev = [
 [project.urls]
 Documentation = "https://github.com/ben-epstein/real-mlops"
 
-[tool.setuptools.dynamic]
-version = {attr = "src.__version__"}
-
 [tool.ruff]
 line-length = 120
 
@@ -52,7 +54,14 @@ line-length = 120
 # See rules and codes: https://docs.astral.sh/ruff/rules/
 select = ["F", "E", "W", "D", "I001", "FIX", "PL", "NPY", "T100"]
 dummy-variable-rgx = "_$|dummy"
-ignore = ["FIX002", "D203", "D213"]
+ignore = [
+    "FIX002",  # block TODO comments
+    "D104",    # require package __init__ docstring
+    "D100"     # require module file docstring
+]
+
+[tool.ruff.lint.pylint]
+max-args = 10
 
 
 [tool.ruff.lint.pydocstyle]

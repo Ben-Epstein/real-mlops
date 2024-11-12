@@ -13,6 +13,7 @@ MODEL (
   FROM delta_scan('./ext_table2')
   GROUP BY part, ts
   ORDER BY part, ts;
-
+  
   @upsert_delta()
+
   
