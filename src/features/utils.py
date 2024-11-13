@@ -22,6 +22,9 @@ def yield_df(df: pl.DataFrame | pd.DataFrame) -> Generator[pd.DataFrame, None, N
 
 def upsert_df_delta(df: pl.DataFrame, gold_delta_path: str, model_name: str) -> None:
     """Upsert the new model df. On conflict, update. On missing, add."""
+    if df.is_empty():
+        print("No data found in delta. Skipping")
+        return
     table_uri = f"{gold_delta_path}/{model_name}"
     if DeltaTable.is_deltatable(table_uri):
         df.write_delta(

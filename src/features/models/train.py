@@ -1,6 +1,7 @@
 from datetime import datetime
 from typing import Any
 
+import duckdb
 import polars as pl
 from sqlmesh import ExecutionContext, model
 from sqlmesh.core.model.kind import ModelKindName
@@ -20,7 +21,9 @@ MAX_RET = 5
         "ts": "datetime",
         "prediction": "bool",
     },
-    kind=dict(name=ModelKindName.INCREMENTAL_BY_TIME_RANGE, time_column="ts"),
+    kind=dict(name=ModelKindName.INCREMENTAL_BY_TIME_RANGE, time_column="ts", batch_size=1, batch_concurrency=1),
+    interval_unit="hour",
+    cron="@daily",
     # table_format="delta",
 )
 def execute(
@@ -30,6 +33,7 @@ def execute(
     execution_time: datetime,
     *,
     gold_delta_uri: str,
+    db_uri: str,
     custom_mult: int = 1,
     must_have_data: bool = True,
     **kwargs: Any,
@@ -38,8 +42,9 @@ def execute(
     mean_cust_ret = context.table("sqlmesh_example.mean_cust_retention")
     cust_cost_spread = context.table("sqlmesh_example.cust_cost_spread")
     WHERE_CLAUSE = f"where ts >= TIMESTAMP '{start}' and ts <= TIMESTAMP '{end}'"
-    df1 = pl.DataFrame(context.fetchdf(f"SELECT * FROM {mean_cust_ret} {WHERE_CLAUSE}"))
-    df2 = pl.DataFrame(context.fetchdf(f"SELECT * FROM {cust_cost_spread} {WHERE_CLAUSE}"))
+    con = duckdb.connect(db_uri)
+    df1 = con.query(f"SELECT * FROM {mean_cust_ret} {WHERE_CLAUSE}").pl()
+    df2 = con.query(f"SELECT * FROM {cust_cost_spread} {WHERE_CLAUSE}").pl()
     merged = df1.join(df2, on=["part", "ts"])
     merged = merged.with_columns(
         pl.when(merged["cust_cost_spread"] * custom_mult > MIN_CUST_COST, merged["mean_cust_retention"] < MAX_RET)
