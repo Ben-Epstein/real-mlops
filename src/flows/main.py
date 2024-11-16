@@ -1,3 +1,8 @@
+"""Prefect flows to populate sqlmesh models.
+
+Check this out for better background tasks in fastapi (via prefect): https://github.com/PrefectHQ/prefect-background-task-examples/tree/main/fastapi-user-signups/fastapi_user_signups
+"""
+
 import os
 import subprocess
 from datetime import date, timedelta
