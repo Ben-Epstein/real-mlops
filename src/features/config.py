@@ -9,6 +9,7 @@ DB_FILE = ROOT_DIR / "db.db"
 GOLD_DELTA_PATH = ROOT_DIR / "gold"
 
 config = Config(
+    # TODO: This connection will be in S3, with the bucket derived by the client name.
     gateways={"local": GatewayConfig(connection=DuckDBConnectionConfig(database=str(DB_FILE)))},
     default_gateway="local",
     model_defaults=ModelDefaultsConfig(dialect="duckdb", start="2024-11-02"),

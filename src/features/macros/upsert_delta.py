@@ -1,15 +1,17 @@
+import os
+
 import duckdb
 from sqlmesh import macro
 from sqlmesh.core.macros import MacroEvaluator
 
-from features.constants import DB_URI_VAR, GOLD_DELTA_URI_VAR
+from features.constants import DB_URI_VAR, ENVIRONMENT, GOLD_DELTA_URI_VAR, PROD
 from features.utils import upsert_df_delta
 
 
 @macro(metadata_only=True)
 def upsert_delta(evaluator: MacroEvaluator) -> str:
     """Take the latest records produced by SQL models and upsert them to their reflected gold delta table."""
-    if evaluator.runtime_stage == "evaluating":
+    if evaluator.runtime_stage == "evaluating" and os.getenv(ENVIRONMENT) == PROD:
         gold_delta_uri = evaluator.var(GOLD_DELTA_URI_VAR)
         db_uri = evaluator.var(DB_URI_VAR)
         con = duckdb.connect(db_uri)
