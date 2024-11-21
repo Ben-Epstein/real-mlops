@@ -38,7 +38,7 @@ def _tmp_product_raw_parquet() -> dict[Path, Path]:
 
 
 @task(log_prints=True)
-def ingest_to_silver(parquet_maps: dict[Path, Path]) -> None:
+def ingest_raw_to_silver(parquet_maps: dict[Path, Path]) -> None:
     """Ingest raw data dump from client to silver delta lake."""
     # TODO: Read from root parquet, appent to ext_table1 and ext_table2
     for parquet_path, ext_table in parquet_maps.items():
@@ -101,7 +101,7 @@ def run_sqlmesh(start_ds: date | None = None, end_ds: date | None = None) -> Non
 @flow(name="Feature Store", log_prints=True)
 def build_features(parquet_paths: dict[Path, Path], start_ds: date | None = None, end_ds: date | None = None) -> None:
     """Main flow. Run sqlmesh, migrate to gold."""
-    ingest_to_silver(parquet_paths)
+    ingest_raw_to_silver(parquet_paths)
     run_sqlmesh(start_ds, end_ds)
 
 
