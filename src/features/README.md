@@ -83,3 +83,11 @@ You will probably get an error about enabling system extensions. You need to fol
 ```markdown
 shut down your system. Then press and hold the Touch ID or power button to launch Startup Security Utility. In Startup Security Utility, enable kernel extensions from the Security Policy button.
 ```
+
+### Demo
+
+https://github.com/user-attachments/assets/ab0c83b5-04a1-4e8b-b4e9-f6cec8b0bec5
+
+
+
+
