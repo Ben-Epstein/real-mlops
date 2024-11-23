@@ -9,7 +9,7 @@ MODEL (
     table_format "delta",
   );
 
-  SELECT part, ts, mean(value) * mean(value) as cust_cost_spread
+  SELECT part, ts, mean(value) * mean(value) as some_breaking_column
   FROM delta_scan('./ext_table2')
   GROUP BY part, ts
   ORDER BY part, ts;
