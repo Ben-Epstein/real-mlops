@@ -21,7 +21,7 @@ config = Config(
         C.DB_URI_VAR: str(DB_FILE),
     },
     cicd_bot=GithubCICDBotConfig(
-        enable_deploy_command=False,  # If True, you can comment /deploy and override the required approver flow
+        enable_deploy_command=True,  # If True, you can comment /deploy and override the required approver flow
         merge_method=MergeMethod.SQUASH,
     ),
     users=[
