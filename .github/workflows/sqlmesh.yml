@@ -43,4 +43,4 @@ jobs:
         shell: bash
       - name: Run CI/CD Bot
         run: |
-          uv run sqlmesh_cicd -p ${{ github.workspace }}/src/features github --token ${{ secrets.SQLMESH_GITHUB_TOKEN }} run-all
+          uv run sqlmesh_cicd -p ${{ github.workspace }}/src/features github --token ${{ secrets.GITHUB_TOKEN }} run-all
