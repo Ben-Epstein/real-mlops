@@ -1,8 +1,5 @@
 # testing data
-ext_table1
-ext_table2
 *.parquet
-db.db
 gold
 
 # Byte-compiled / optimized / DLL files

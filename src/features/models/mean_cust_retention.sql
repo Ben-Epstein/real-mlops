@@ -14,4 +14,4 @@ MODEL (
   GROUP BY part, ts
   ORDER BY part, ts;
 
-  @upsert_delta()
+--   @upsert_delta()

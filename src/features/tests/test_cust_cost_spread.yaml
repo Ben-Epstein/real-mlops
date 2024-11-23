@@ -1,0 +1,35 @@
+test_cust_cost_spread:
+  model: sqlmesh_example.cust_cost_spread
+  inputs: {}
+  outputs:
+    query:
+    - part: 0
+      ts: 2024-11-07 00:00:00
+      cust_cost_spread: 143.04160000000002
+    - part: 0
+      ts: 2024-11-10 00:00:00
+      cust_cost_spread: 143.04160000000002
+    - part: 0
+      ts: 2024-11-14 00:00:00
+      cust_cost_spread: 143.04160000000002
+    - part: 0
+      ts: 2024-11-15 00:00:00
+      cust_cost_spread: 143.04160000000002
+    - part: 0
+      ts: 2024-11-17 00:00:00
+      cust_cost_spread: 143.04160000000002
+    - part: 1
+      ts: 2024-11-07 00:00:00
+      cust_cost_spread: 238.3936
+    - part: 1
+      ts: 2024-11-10 00:00:00
+      cust_cost_spread: 238.3936
+    - part: 1
+      ts: 2024-11-14 00:00:00
+      cust_cost_spread: 238.3936
+    - part: 1
+      ts: 2024-11-15 00:00:00
+      cust_cost_spread: 238.3936
+    - part: 1
+      ts: 2024-11-17 00:00:00
+      cust_cost_spread: 238.3936

@@ -6,7 +6,7 @@ import polars as pl
 from sqlmesh import ExecutionContext, model
 from sqlmesh.core.model.kind import ModelKindName
 
-from features.utils import PythonModelReturn, upsert_df_delta, yield_df
+from features.utils import PythonModelReturn, yield_df
 
 MODEL_NAME = "sqlmesh_example.train"
 
@@ -21,12 +21,7 @@ MAX_RET = 5
         "ts": "datetime",
         "prediction": "bool",
     },
-    kind=dict(
-        name=ModelKindName.INCREMENTAL_BY_TIME_RANGE,
-        time_column="ts",
-        batch_size=1,
-        batch_concurrency=1
-    ),
+    kind=dict(name=ModelKindName.INCREMENTAL_BY_TIME_RANGE, time_column="ts", batch_size=1, batch_concurrency=1),
     interval_unit="hour",
     cron="@daily",
     # table_format="delta",
@@ -59,4 +54,4 @@ def execute(
     )
     yield from yield_df(merged)
     # Implicit post-statement
-    upsert_df_delta(merged, gold_delta_uri, MODEL_NAME)
+    # upsert_df_delta(merged, gold_delta_uri, MODEL_NAME)
