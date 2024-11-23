@@ -1,5 +1,7 @@
 # testing data
 *.parquet
+!ext_table1
+!ext_table2
 gold
 
 # Byte-compiled / optimized / DLL files
