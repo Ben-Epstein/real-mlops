@@ -56,7 +56,6 @@ jobs:
       - name: commit db on success pr sync
         if: steps.run-bot.outputs.pr_environment_synced == 'success' && steps.run-bot.outputs.prod_environment_synced != 'success'
         run: |
-            set -x
             git fetch origin ${{ github.head_ref || github.ref_name }} 
             git checkout ${{ github.head_ref || github.ref_name }} 
             git pull
@@ -66,19 +65,16 @@ jobs:
             git config --global user.name "GitHub Actions Bot"
             git config --global user.email "actions@github.com"
             git add -f ${{ github.workspace }}/db.db
-            git commit -m "Update db.db after CI/CD run [no ci]" --allow-empty
+            git commit -m "Update virtual environment after CI PR sync [no ci]" --allow-empty
             git push
 
       - name: commit db on success prod sysnc
         if: steps.run-bot.outputs.prod_environment_synced == 'success'
         run: |
-          sleep 5
-          set -x
-          echo $(git status)
           echo "Committing and pushing changes..."
           git config --global user.name "GitHub Actions Bot"
           git config --global user.email "actions@github.com"
           uv run sqlmesh -p ${{ github.workspace }}/src/features plan
           git add -f ${{ github.workspace }}/db.db
-          git commit -m "Update db.db after CI/CD run" --allow-empty
+          git commit -m "Update prod db after CI/CD run" --allow-empty
           git push --force origin HEAD:main
