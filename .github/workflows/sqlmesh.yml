@@ -83,7 +83,7 @@ jobs:
           git push --force origin HEAD:main
   verify-prod-sync:
     needs: sqlmesh
-    name: SQLMesh - Block PR until Prod is Synced
+    name: SQLMesh - Prod Environment Synced
     runs-on: ubuntu-latest
     # We need to run this way instead of basing the run on the `if`, because a skip counts as a pass from
     # github required checks perspective. So we need this to explicitly fail to block merging.
