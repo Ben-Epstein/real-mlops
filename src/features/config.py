@@ -1,7 +1,6 @@
 from pathlib import Path
 
 from sqlmesh.core.config import Config, DuckDBConnectionConfig, GatewayConfig, ModelDefaultsConfig
-from sqlmesh.core.user import User, UserRole
 from sqlmesh.integrations.github.cicd.config import GithubCICDBotConfig, MergeMethod
 
 from features import constants as C
