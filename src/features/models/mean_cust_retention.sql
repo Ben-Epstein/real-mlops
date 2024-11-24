@@ -9,7 +9,7 @@ MODEL (
     table_format "delta",
   );
 
-  SELECT part, ts, mean(value) * mean(value) as mean_cust_retention2
+  SELECT part, ts, mean(value) * mean(value) as mean_cust_retention, mean(value) * 4 as value_2
   FROM delta_scan('./ext_table1')
   GROUP BY part, ts
   ORDER BY part, ts;
