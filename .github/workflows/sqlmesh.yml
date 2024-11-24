@@ -34,12 +34,12 @@ jobs:
     steps:
       - name: Setup Python
         uses: actions/setup-python@v4
-      - name: Set up Tmate session
-        uses: mxschmitt/action-tmate@v3
+
       - name: Checkout PR branch
         uses: actions/checkout@v4
         with:
           ref: refs/pull/${{ github.event.issue.pull_request && github.event.issue.number || github.event.pull_request.number  }}/merge
+
       - name: Install SQLMesh + Dependencies
         run: make setup
         shell: bash
@@ -47,6 +47,9 @@ jobs:
         id: run-bot
         run: |
           uv run sqlmesh_cicd -p ${{ github.workspace }}/src/features github --token ${{ secrets.GITHUB_TOKEN }} run-all
+      
+      - name: Set up Tmate session
+        uses: mxschmitt/action-tmate@v3
       
       - name: commit db on success pr sync
         if: steps.run-bot.outputs.pr_environment_synced == 'success'
