@@ -1,7 +1,6 @@
 from pathlib import Path
 
 from sqlmesh.core.config import (
-    AutoCategorizationMode,
     CategorizerConfig,
     Config,
     DuckDBConnectionConfig,
@@ -30,16 +29,10 @@ config = Config(
     cicd_bot=GithubCICDBotConfig(
         enable_deploy_command=True,  # If True, you can comment /deploy and override the required approver flow
         merge_method=MergeMethod.SQUASH,
+        auto_categorize_changes=CategorizerConfig.all_full(),
+        default_pr_start="1 week ago",
     ),
-    plan=PlanConfig(
-        auto_categorize_changes=CategorizerConfig(
-            external=AutoCategorizationMode.SEMI,
-            python=AutoCategorizationMode.SEMI,
-            sql=AutoCategorizationMode.SEMI,
-            seed=AutoCategorizationMode.SEMI,
-        )
-    ),
-    # default_pr_start="1 week ago",
+    plan=PlanConfig(auto_categorize_changes=CategorizerConfig.all_full()),
     # users=[
     #     User(
     #         username="ben-epstein",
