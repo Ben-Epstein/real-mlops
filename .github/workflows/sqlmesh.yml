@@ -50,6 +50,7 @@ jobs:
         if: steps.run-bot.outputs.prod_environment_synced == 'success'
         run: |
           set -x
+          ecoh $(git status)
           echo "Changes detected in db.db. Committing and pushing changes..."
           git config --global user.name "GitHub Actions Bot"
           git config --global user.email "actions@github.com"
