@@ -49,6 +49,7 @@ jobs:
       - name: commit db on success pr sync
         if: steps.run-bot.outputs.pr_environment_synced == 'success'
         run: |
+            sleep 500
             set -x
             git fetch origin ${{ github.head_ref || github.ref_name }} 
             git checkout ${{ github.head_ref || github.ref_name }} 
