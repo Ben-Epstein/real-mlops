@@ -5,7 +5,7 @@ on:
       - main
 
 jobs:
-  ci:
+  check-lockfile:
     runs-on: ubuntu-latest
     strategy:
       matrix:
