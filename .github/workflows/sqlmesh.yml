@@ -53,20 +53,20 @@ jobs:
       # - name: Set up Tmate session
       #   uses: mxschmitt/action-tmate@v2
       
-      - name: commit db on success pr sync
-        if: steps.run-bot.outputs.pr_environment_synced == 'success' && steps.run-bot.outputs.prod_environment_synced != 'success'
-        run: |
-            git fetch origin ${{ github.head_ref || github.ref_name }} 
-            git checkout ${{ github.head_ref || github.ref_name }} 
-            git pull
-            uv run sqlmesh -p ${{ github.workspace }}/src/features plan real_mlops_${{ github.event.issue.pull_request && github.event.issue.number || github.event.pull_request.number  }}
-            echo $(git status)
-            echo "Committing and pushing changes..."
-            git config --global user.name "GitHub Actions Bot"
-            git config --global user.email "actions@github.com"
-            git add -f ${{ github.workspace }}/db.db
-            git commit -m "Update virtual environment after CI PR sync [no ci]" --allow-empty
-            git push
+      # - name: commit db on success pr sync
+      #   if: steps.run-bot.outputs.pr_environment_synced == 'success' && steps.run-bot.outputs.prod_environment_synced != 'success'
+      #   run: |
+      #       git fetch origin ${{ github.head_ref || github.ref_name }} 
+      #       git checkout ${{ github.head_ref || github.ref_name }} 
+      #       git pull
+      #       uv run sqlmesh -p ${{ github.workspace }}/src/features plan real_mlops_${{ github.event.issue.pull_request && github.event.issue.number || github.event.pull_request.number  }}
+      #       echo $(git status)
+      #       echo "Committing and pushing changes..."
+      #       git config --global user.name "GitHub Actions Bot"
+      #       git config --global user.email "actions@github.com"
+      #       git add -f ${{ github.workspace }}/db.db
+      #       git commit -m "Update virtual environment after CI PR sync [no ci]" --allow-empty
+      #       git push
 
       - name: commit db on success prod sysnc
         if: steps.run-bot.outputs.prod_environment_synced == 'success'
