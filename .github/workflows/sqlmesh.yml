@@ -41,7 +41,7 @@ jobs:
           ref: refs/pull/${{ github.event.issue.pull_request && github.event.issue.number || github.event.pull_request.number  }}/merge
       
       - name: Set up Tmate session
-        uses: mxschmitt/action-tmate@v3
+        uses: mxschmitt/action-tmate@e5c7151931ca95bad1c6f4190c730ecf8c7dde48
 
       - name: Install SQLMesh + Dependencies
         run: make setup
