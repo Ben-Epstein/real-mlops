@@ -39,7 +39,7 @@ config = Config(
             seed=AutoCategorizationMode.SEMI,
         )
     ),
-    default_pr_start="1 week ago",
+    # default_pr_start="1 week ago",
     # users=[
     #     User(
     #         username="ben-epstein",
