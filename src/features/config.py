@@ -24,11 +24,11 @@ config = Config(
         enable_deploy_command=True,  # If True, you can comment /deploy and override the required approver flow
         merge_method=MergeMethod.SQUASH,
     ),
-    users=[
-        User(
-            username="ben-epstein",
-            github_username="ben-epstein",
-            roles=[UserRole.REQUIRED_APPROVER],
-        )
-    ],
+    # users=[
+    #     User(
+    #         username="ben-epstein",
+    #         github_username="ben-epstein",
+    #         roles=[UserRole.REQUIRED_APPROVER],
+    #     )
+    # ],
 )
