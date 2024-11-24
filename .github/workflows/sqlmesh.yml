@@ -11,9 +11,9 @@ on:
     - submitted
     - dismissed
   # Required if using comments to issue commands to the bot
-  # issue_comment:
-  #   types:
-  #   - created
+  issue_comment:
+    types:
+    - created
 # The latest commit is the one that will be used to create the PR environment and deploy to production
 concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref || github.ref_name }}
