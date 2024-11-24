@@ -29,10 +29,10 @@ config = Config(
     cicd_bot=GithubCICDBotConfig(
         enable_deploy_command=True,  # If True, you can comment /deploy and override the required approver flow
         merge_method=MergeMethod.SQUASH,
-        auto_categorize_changes=CategorizerConfig.all_semi(),
+        auto_categorize_changes=CategorizerConfig.all_full(),
         default_pr_start="1 week ago",
     ),
-    plan=PlanConfig(auto_categorize_changes=CategorizerConfig.all_semi()),
+    plan=PlanConfig(auto_categorize_changes=CategorizerConfig.all_full()),
     # users=[
     #     User(
     #         username="ben-epstein",
