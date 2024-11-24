@@ -50,6 +50,7 @@ jobs:
         if: steps.run-bot.outputs.pr_environment_synced == 'success'
         run: |
             set -x
+            git fetch origin ${{ github.head_ref || github.ref_name }} 
             git checkout ${{ github.head_ref || github.ref_name }} 
             git pull
             echo $(git status)
@@ -59,7 +60,7 @@ jobs:
             git add -f ${{ github.workspace }}/db.db
             git commit -m "Update db.db after CI/CD run [no ci]" --allow-empty
             git push
-            
+
       - name: commit db on success prod sysnc
         if: steps.run-bot.outputs.prod_environment_synced == 'success'
         run: |
