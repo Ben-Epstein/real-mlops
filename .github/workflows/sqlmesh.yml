@@ -22,7 +22,6 @@ jobs:
   sqlmesh:
     name: SQLMesh Actions Workflow
     runs-on: ubuntu-latest
-    if: github.actor != 'github-actions[bot]'
     permissions:
       # Required to access code in PR
       contents: write
@@ -32,6 +31,8 @@ jobs:
       checks: write
       # Required to merge
       pull-requests: write
+    outputs:
+      prod_environment_synced: ${{ steps.run-bot.outputs.prod_environment_synced }}
     steps:
       - name: Setup Python
         uses: actions/setup-python@v4
@@ -80,3 +81,15 @@ jobs:
           git add -f ${{ github.workspace }}/db.db
           git commit -m "Update prod db after CI/CD run" --allow-empty
           git push --force origin HEAD:main
+  verify-prod-sync:
+    needs: sqlmesh
+    name: SQLMesh - Prod Environment Synced
+    runs-on: ubuntu-latest
+    if: always()  # Run even if previous job was skipped
+    steps:
+      - name: Check Prod Sync Status
+        run: |
+          if [[ "${{ needs.sqlmesh.outputs.prod_environment_synced }}" != "success" ]]; then
+            echo "Production environment sync was not successful"
+            exit 1
+          fi
