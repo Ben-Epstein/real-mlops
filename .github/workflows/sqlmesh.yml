@@ -50,14 +50,16 @@ jobs:
         if: steps.run-bot.outputs.pr_environment_synced == 'success'
         run: |
             set -x
+            git checkout ${{ github.head_ref || github.ref_name }} 
+            git pull
             echo $(git status)
             echo "Committing and pushing changes..."
             git config --global user.name "GitHub Actions Bot"
             git config --global user.email "actions@github.com"
             git add -f ${{ github.workspace }}/db.db
             git commit -m "Update db.db after CI/CD run [no ci]" --allow-empty
-            git push origin HEAD:${{ github.head_ref || github.ref_name }} 
-
+            git push
+            
       - name: commit db on success prod sysnc
         if: steps.run-bot.outputs.prod_environment_synced == 'success'
         run: |
