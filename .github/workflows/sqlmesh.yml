@@ -51,7 +51,7 @@ jobs:
         run: |
           set -x
           echo "Changes detected in db.db. Committing and pushing changes..."
-          git checkout main && git pull
+          git pull origin main
           git config --global user.name "GitHub Actions Bot"
           git config --global user.email "actions@github.com"
           git add -f ${{ github.workspace }}/db.db
