@@ -33,10 +33,10 @@ config = Config(
     ),
     plan=PlanConfig(
         auto_categorize_changes=CategorizerConfig(
-            external=AutoCategorizationMode.SEMI,
-            python=AutoCategorizationMode.SEMI,
-            sql=AutoCategorizationMode.SEMI,
-            seed=AutoCategorizationMode.SEMI,
+            external=AutoCategorizationMode.FULL,
+            python=AutoCategorizationMode.FULL,
+            sql=AutoCategorizationMode.FULL,
+            seed=AutoCategorizationMode.FULL,
         )
     ),
     # default_pr_start="1 week ago",
