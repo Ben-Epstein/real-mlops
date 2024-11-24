@@ -85,15 +85,13 @@ jobs:
     needs: sqlmesh
     name: SQLMesh - Block PR until Prod is Synced
     runs-on: ubuntu-latest
-    if: needs.sqlmesh.outputs.prod_environment_synced == 'success'
+    # We need to run this way instead of basing the run on the `if`, because a skip counts as a pass from
+    # github required checks perspective. So we need this to explicitly fail to block merging.
+    if: always()  # Run even if previous job was skipped
     steps:
-      - name: success
-        run: exit 0
-    # if: always()  # Run even if previous job was skipped
-    # steps:
-    #   - name: Check Prod Sync Status
-    #     run: |
-    #       if [[ "${{ needs.sqlmesh.outputs.prod_environment_synced }}" != "success" ]]; then
-    #         echo "Production environment sync was not successful"
-    #         exit 1
-    #       fi
+      - name: Check Prod Sync Status
+        run: |
+          if [[ "${{ needs.sqlmesh.outputs.prod_environment_synced }}" != "success" ]]; then
+            echo "Production environment sync was not successful"
+            exit 1
+          fi
