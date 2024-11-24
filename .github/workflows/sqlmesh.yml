@@ -48,17 +48,19 @@ jobs:
         run: |
           uv run sqlmesh_cicd -p ${{ github.workspace }}/src/features github --token ${{ secrets.GITHUB_TOKEN }} run-all
       
-      - name: Set up Tmate session
-        uses: mxschmitt/action-tmate@v2
+      # If you need to debug, uncomment this. You can then ssh into the github action VM with tmux
+      # Then cntrl+C will give you write access
+      # - name: Set up Tmate session
+      #   uses: mxschmitt/action-tmate@v2
       
       - name: commit db on success pr sync
         if: steps.run-bot.outputs.pr_environment_synced == 'success'
         run: |
-            sleep 500
             set -x
             git fetch origin ${{ github.head_ref || github.ref_name }} 
             git checkout ${{ github.head_ref || github.ref_name }} 
             git pull
+            uv run sqlmesh -p ${{ github.workspace }}/src/features plan real_mlops_${{ github.event.issue.pull_request && github.event.issue.number || github.event.pull_request.number  }}
             echo $(git status)
             echo "Committing and pushing changes..."
             git config --global user.name "GitHub Actions Bot"
