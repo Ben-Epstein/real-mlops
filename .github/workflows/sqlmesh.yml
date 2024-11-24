@@ -45,13 +45,26 @@ jobs:
         id: run-bot
         run: |
           uv run sqlmesh_cicd -p ${{ github.workspace }}/src/features github --token ${{ secrets.GITHUB_TOKEN }} run-all
-      - name: commit db on success
-        id: do-after-pr-env-sync
+      
+      - name: commit db on success pr sync
+        if: steps.run-bot.outputs.pr_environment_synced == 'success'
+        run: |
+            set -x
+            echo $(git status)
+            echo "Committing and pushing changes..."
+            git config --global user.name "GitHub Actions Bot"
+            git config --global user.email "actions@github.com"
+            git add -f ${{ github.workspace }}/db.db
+            git commit -m "Update db.db after CI/CD run [no ci]" --allow-empty
+            git push
+
+      - name: commit db on success prod sysnc
         if: steps.run-bot.outputs.prod_environment_synced == 'success'
         run: |
+          sleep 5
           set -x
           echo $(git status)
-          echo "Changes detected in db.db. Committing and pushing changes..."
+          echo "Committing and pushing changes..."
           git config --global user.name "GitHub Actions Bot"
           git config --global user.email "actions@github.com"
           git add -f ${{ github.workspace }}/db.db
