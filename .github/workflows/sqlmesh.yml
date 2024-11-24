@@ -85,12 +85,12 @@ jobs:
     needs: sqlmesh
     name: SQLMesh - Prod Environment Synced
     runs-on: ubuntu-latest
-    if: needs.sqlmesh.outputs.prod_environment_synced == 'success'
-    # if: always()  # Run even if previous job was skipped
-    # steps:
-    #   - name: Check Prod Sync Status
-    #     run: |
-    #       if [[ "${{ needs.sqlmesh.outputs.prod_environment_synced }}" != "success" ]]; then
-    #         echo "Production environment sync was not successful"
-    #         exit 1
-    #       fi
+    # if: needs.sqlmesh.outputs.prod_environment_synced == 'success'
+    if: always()  # Run even if previous job was skipped
+    steps:
+      - name: Check Prod Sync Status
+        run: |
+          if [[ "${{ needs.sqlmesh.outputs.prod_environment_synced }}" != "success" ]]; then
+            echo "Production environment sync was not successful"
+            exit 1
+          fi
