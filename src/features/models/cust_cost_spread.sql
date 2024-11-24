@@ -12,7 +12,7 @@ MODEL (
   SELECT t2.part, t2.ts, mean(t2.value) * mean(t2.value) as cust_cost_spread
   FROM delta_scan('./ext_table2') as t2
   GROUP BY t2.part, t2.ts
-  HAVING t2.part < 9
+  HAVING t2.part < 2
   ORDER BY t2.part, t2.ts;
 
   
