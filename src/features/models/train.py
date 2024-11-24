@@ -21,7 +21,7 @@ MAX_RET = 5
         "ts": "datetime",
         "prediction": "bool",
     },
-    kind=dict(name=ModelKindName.INCREMENTAL_BY_TIME_RANGE, time_column="ts", batch_size=1, batch_concurrency=1),
+    kind=dict(name=ModelKindName.INCREMENTAL_BY_TIME_RANGE, time_column="ts", batch_size=12, batch_concurrency=1),
     interval_unit="hour",
     cron="@daily",
     # table_format="delta",
