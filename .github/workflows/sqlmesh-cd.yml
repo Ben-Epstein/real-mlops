@@ -1,0 +1,32 @@
+name: Handle DB Changes
+on:
+  workflow_run:
+    workflows:
+      - SQLMesh - Prod Environment Synced # This is the workflow name that modifies db.db
+    types:
+      - completed
+jobs:
+  check-and-commit:
+    name: Check and Commit File
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }} # Run only if Prod Environment Synced succeeded
+    permissions:
+      contents: write # Allows committing changes
+    steps:
+      - name: Checkout main branch
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Check for Changes in db.db
+        run: |
+          git fetch origin
+          if git diff --quiet HEAD -- db.db; then
+            echo "No changes detected in db.db."
+          else
+            echo "Changes detected in db.db. Committing and pushing changes..."
+            git config --global user.name "GitHub Actions Bot"
+            git config --global user.email "actions@github.com"
+            git add db.db
+            git commit -m "Update db.db after Prod Environment Sync"
+            git push
