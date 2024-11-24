@@ -49,6 +49,7 @@ jobs:
         id: do-after-pr-env-sync
         if: steps.run-bot.outputs.prod_environment_synced == 'success'
         run: |
+          set -x
           git fetch origin
           if git diff --quiet HEAD -- db.db; then
             echo "No changes detected in db.db."
@@ -59,3 +60,4 @@ jobs:
             git add db.db
             git commit -m "Update db.db after CI/CD run"
             git push
+          fi
