@@ -83,7 +83,7 @@ jobs:
           git push --force origin HEAD:main
   verify-prod-sync:
     needs: sqlmesh
-    name: SQLMesh - Prod Environment Synced
+    name: SQLMesh - Block PR until Prod is Synced
     runs-on: ubuntu-latest
     # if: needs.sqlmesh.outputs.prod_environment_synced == 'success'
     if: always()  # Run even if previous job was skipped
