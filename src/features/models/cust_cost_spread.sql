@@ -9,10 +9,10 @@ MODEL (
     table_format "delta",
   );
 
-  SELECT part, ts, mean(value) * mean(value) as cust_cost_spread
-  FROM delta_scan('./ext_table2')
-  GROUP BY part, ts
-  ORDER BY part, ts;
+  SELECT t2.part, t2.ts, mean(t2.value) * mean(t2.value) as cust_cost_spread
+  FROM delta_scan('./ext_table2') as t2
+  GROUP BY t2.part, t2.ts
+  ORDER BY t2.part, t2.ts;
 
   
 --   @upsert_delta()
