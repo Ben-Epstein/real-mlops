@@ -1,7 +1,14 @@
 from pathlib import Path
 
-from sqlmesh.core.config import Config, DuckDBConnectionConfig, GatewayConfig, ModelDefaultsConfig
-from sqlmesh.core.user import User, UserRole
+from sqlmesh.core.config import (
+    AutoCategorizationMode,
+    CategorizerConfig,
+    Config,
+    DuckDBConnectionConfig,
+    GatewayConfig,
+    ModelDefaultsConfig,
+    PlanConfig,
+)
 from sqlmesh.integrations.github.cicd.config import GithubCICDBotConfig, MergeMethod
 
 from features import constants as C
@@ -21,14 +28,23 @@ config = Config(
         C.DB_URI_VAR: str(DB_FILE),
     },
     cicd_bot=GithubCICDBotConfig(
-        enable_deploy_command=False,  # If True, you can comment /deploy and override the required approver flow
+        enable_deploy_command=True,  # If True, you can comment /deploy and override the required approver flow
         merge_method=MergeMethod.SQUASH,
     ),
-    users=[
-        User(
-            username="ben-epstein",
-            github_username="ben-epstein",
-            roles=[UserRole.REQUIRED_APPROVER],
+    plan=PlanConfig(
+        auto_categorize_changes=CategorizerConfig(
+            external=AutoCategorizationMode.SEMI,
+            python=AutoCategorizationMode.SEMI,
+            sql=AutoCategorizationMode.SEMI,
+            seed=AutoCategorizationMode.SEMI,
         )
-    ],
+    ),
+    # default_pr_start="1 week ago",
+    # users=[
+    #     User(
+    #         username="ben-epstein",
+    #         github_username="ben-epstein",
+    #         roles=[UserRole.REQUIRED_APPROVER],
+    #     )
+    # ],
 )
