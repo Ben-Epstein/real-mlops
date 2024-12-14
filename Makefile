@@ -34,6 +34,6 @@ test: setup
 	uv --quiet run pytest tests --cov=api --cov=tests --cov-fail-under=85 --cov-branch tests
 
 
-.PHONE: sqlmesh-ui
+.PHONY: sqlmesh-ui
 sqlmesh-ui:
 	uv pip install 'sqlmesh[web]' && uv run sqlmesh -p src/features ui
