@@ -8,11 +8,12 @@ requires-python = ">=3.9"
 dependencies = [
     "duckdb>=1.1.2, <2",
     "prefect>=3.1.0, <4",
-    "sqlmesh[github,slack,llm]>=0.132.0, <0.133",
+    "sqlmesh[github,slack,llm]==0.147.0",
     "pydantic >=2.9.2, <3",
     "polars[pyarrow] >=1.12, <2",
     "pyarrow >=18, <19",
     "deltalake >=0.21.0, <0.22",
+    "psycopg2-binary>=2.9.10",
 ]
 
 # [tool.setuptools.dynamic]

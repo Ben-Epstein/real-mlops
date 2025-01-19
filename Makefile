@@ -2,7 +2,7 @@ export PYTHONPATH = .venv
 
 .PHONY: uv
 uv:
-	pip install --upgrade 'uv>=0.4.6,<0.5'
+	pipx install --upgrade 'uv>=0.4.6,<0.5'
 	uv venv
 
 .PHONY: setup

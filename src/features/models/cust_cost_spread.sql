@@ -6,14 +6,17 @@ MODEL (
     cron '@daily',
     grain (id, ts),
     audits (assert_positive_order_ids),
-    table_format "delta",
+    storage_format "columnar",
   );
 
-  SELECT t2.part, t2.ts, mean(t2.value) * mean(t2.value) as cust_cost_spread
-  FROM delta_scan('./ext_table2') as t2
-  GROUP BY t2.part, t2.ts
-  HAVING t2.part < 4
-  ORDER BY t2.part, t2.ts;
+  SELECT part, ts, mean(value) * mean(value) as cust_cost_spread
+  -- we cant read delta yet.. https://github.com/Mooncake-Labs/pg_mooncake/issues/99
+  FROM mooncake.read_parquet('/workspace/ext_table1.parquet') as (id int, ts timestamp, part int, value float)
+  GROUP BY part, ts
+  HAVING part < 4
+  ORDER BY part, ts;
+
+  -- FROM delta_scan('./ext_table2') as t2
 
   
 --   @upsert_delta()
