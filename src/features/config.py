@@ -53,7 +53,7 @@ config = Config(
         ),
     },
     default_gateway="postgres",
-    model_defaults=ModelDefaultsConfig(dialect="postgres", start="2024-11-02"),
+    model_defaults=ModelDefaultsConfig(dialect="duckdb", start="2024-11-02"),
     variables={
         "custom_mult": 5,
         C.GOLD_DELTA_URI_VAR: str(RELATIVE_GOLD_DELTA_PATH),
